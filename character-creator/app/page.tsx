@@ -100,34 +100,13 @@ export default function Home() {
     };
   };
 
-  const handleSaveToData = async () => {
-    const character = buildCharacter();
-
-    try {
-      const response = await fetch('/api/characters', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(character),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert(`Character "${character.basicInfo.name}" saved successfully!`);
-      } else {
-        alert(`Failed to save character: ${data.error}`);
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Failed to save character. Please try again.');
-    }
-  };
-
-  const handleExportDownload = () => {
+  const handleSave = () => {
     const character = buildCharacter();
     exportCharacterToJSON(character);
+  };
+
+  const handleLoad = () => {
+    fileInputRef.current?.click();
   };
 
   const handleLoadCharacter = (character: Character) => {
@@ -173,56 +152,33 @@ export default function Home() {
 
         <div className="mb-6 flex flex-wrap gap-3">
           <button
-            onClick={handleSaveToData}
-            className="px-6 py-3 bg-[var(--accent)] hover:bg-[var(--accent)]/80 text-black font-semibold rounded-lg transition-colors flex items-center gap-2"
+            onClick={handleSave}
+            className="px-6 py-3 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-semibold rounded-lg transition-colors flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             Save Character
           </button>
 
           <button
-            onClick={() => setShowCharacterList(true)}
-            className="px-6 py-3 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-semibold rounded-lg transition-colors flex items-center gap-2"
+            onClick={handleLoad}
+            className="px-6 py-3 bg-[var(--secondary)] hover:bg-[var(--secondary)]/80 text-white font-semibold rounded-lg transition-colors flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
             Load Character
           </button>
 
-          <button
-            onClick={handleExportDownload}
-            className="px-6 py-3 bg-[var(--input-bg)] hover:bg-[var(--border)] text-[var(--foreground)] font-semibold rounded-lg transition-colors flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Download JSON
-          </button>
-
-          <label className="px-6 py-3 bg-[var(--input-bg)] hover:bg-[var(--border)] text-[var(--foreground)] font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-            Import JSON
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json"
-              onChange={handleImport}
-              className="hidden"
-            />
-          </label>
-        </div>
-
-        {showCharacterList && (
-          <CharacterList
-            onLoadCharacter={handleLoadCharacter}
-            onClose={() => setShowCharacterList(false)}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
           />
-        )}
+        </div>
 
         <div className="space-y-6">
           <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--border)]">
