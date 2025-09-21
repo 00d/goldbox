@@ -71,9 +71,8 @@ export default function SkillsSelector({
   }, 0);
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--border)]">
+    <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-[var(--primary)]">Skills</h2>
         <div className="text-right">
           <div className="text-sm text-gray-400">Skill Points</div>
           <div className="text-xl font-bold">

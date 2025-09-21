@@ -29,8 +29,7 @@ export default function AbilityScores({ scores, onChange }: AbilityScoresProps) 
   };
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--border)]">
-      <h2 className="text-2xl font-bold mb-4 text-[var(--primary)]">Ability Scores</h2>
+    <div>
       <p className="text-sm text-gray-400 mb-6">
         Standard scores range from 3 to 18. Use point buy or roll for initial values.
       </p>

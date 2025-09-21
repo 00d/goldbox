@@ -7,14 +7,9 @@ export type AbilityScores = {
   charisma: number;
 };
 
-export type Race =
-  | 'human'
-  | 'dwarf'
-  | 'elf'
-  | 'gnome'
-  | 'half-elf'
-  | 'half-orc'
-  | 'halfling';
+export type Race = string;
+
+export type Template = string;
 
 export type CharacterClass =
   | 'barbarian'
@@ -105,11 +100,12 @@ export type Character = {
     name: string;
     player: string;
     race: Race;
+    template?: Template;
     class: CharacterClass;
     level: number;
     alignment: Alignment;
     deity?: string;
-    size: 'small' | 'medium';
+    size: 'fine' | 'diminutive' | 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'gargantuan' | 'colossal';
     age?: number;
     gender?: string;
     height?: string;

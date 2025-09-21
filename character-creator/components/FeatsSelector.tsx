@@ -38,9 +38,8 @@ export default function FeatsSelector({ selectedFeats, availableFeats, onChange 
   const featTypes = ['all', ...new Set(commonFeats.map((f) => f.type).filter(Boolean))];
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--border)]">
+    <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-[var(--primary)]">Feats</h2>
         <div className="text-right">
           <div className="text-sm text-gray-400">Available Feats</div>
           <div className="text-xl font-bold">

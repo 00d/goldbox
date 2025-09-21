@@ -1,25 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Race } from '@/types/character';
-import { races, RaceData } from '@/data/races';
+import { Template } from '@/types/character';
+import { templates, TemplateData } from '@/data/templates';
 
-interface RaceSelectorProps {
-  selectedRace: Race | '';
-  onChange: (race: Race) => void;
+interface TemplateSelectorProps {
+  selectedTemplate: Template | '';
+  onChange: (template: Template | '') => void;
 }
 
-export default function RaceSelector({ selectedRace, onChange }: RaceSelectorProps) {
+export default function TemplateSelector({ selectedTemplate, onChange }: TemplateSelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const raceKeys = Object.keys(races) as Race[];
+  const templateKeys = Object.keys(templates) as Template[];
 
-  const categories = ['all', ...new Set(Object.values(races).map(r => r.category))];
+  const categories = ['all', ...new Set(Object.values(templates).map(t => t.category))];
 
-  const filteredRaces = raceKeys.filter((raceKey) => {
-    const race = races[raceKey];
-    const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || race.category === selectedCategory;
+  const filteredTemplates = templateKeys.filter((templateKey) => {
+    const template = templates[templateKey];
+    const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         template.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -27,8 +28,8 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
     return cat.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   };
 
-  const formatAbilityMods = (race: RaceData) => {
-    const mods = Object.entries(race.abilityAdjustments)
+  const formatAbilityMods = (template: TemplateData) => {
+    const mods = Object.entries(template.abilityAdjustments)
       .map(([ability, value]) =>
         `${ability.slice(0, 3).toUpperCase()} ${value > 0 ? '+' : ''}${value}`
       )
@@ -38,11 +39,18 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
 
   return (
     <div>
+      <div className="mb-4 p-4 bg-[var(--input-bg)] rounded-lg border border-[var(--border)] text-sm">
+        <p className="text-gray-300">
+          Templates are optional modifiers that can be applied to your character, such as Half-Dragon, Vampire, or Lycanthrope.
+          They modify ability scores and grant special abilities, but may increase effective character level.
+        </p>
+      </div>
+
       <div className="mb-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <input
             type="text"
-            placeholder="Search races..."
+            placeholder="Search templates..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-[var(--input-bg)] border border-[var(--border)] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
@@ -61,15 +69,15 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
         </select>
       </div>
 
-      {selectedRace && races[selectedRace] && (
+      {selectedTemplate && templates[selectedTemplate] && (
         <div className="mb-4 p-4 bg-[var(--input-bg)] rounded-lg border border-[var(--primary)]">
-          <h3 className="font-semibold mb-2 text-[var(--accent)]">Selected Race</h3>
+          <h3 className="font-semibold mb-2 text-[var(--accent)]">Selected Template</h3>
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-medium">{races[selectedRace].name}</span>
-              {races[selectedRace].levelAdjustment && (
+              <span className="font-medium">{templates[selectedTemplate].name}</span>
+              {templates[selectedTemplate].levelAdjustment && (
                 <span className="ml-2 text-xs bg-yellow-900/50 text-yellow-300 px-2 py-0.5 rounded">
-                  LA +{races[selectedRace].levelAdjustment}
+                  LA +{templates[selectedTemplate].levelAdjustment}
                 </span>
               )}
             </div>
@@ -77,21 +85,27 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
               onClick={() => onChange('')}
               className="text-sm text-[var(--primary)] hover:text-[var(--primary-dark)]"
             >
-              Change
+              Remove
             </button>
           </div>
         </div>
       )}
 
+      {!selectedTemplate && (
+        <div className="mb-4 p-3 bg-[var(--background)] rounded-lg border border-[var(--border)] text-sm text-gray-400">
+          No template selected (optional)
+        </div>
+      )}
+
       <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-        {filteredRaces.map((raceKey) => {
-          const race = races[raceKey];
-          const isSelected = selectedRace === raceKey;
+        {filteredTemplates.map((templateKey) => {
+          const template = templates[templateKey];
+          const isSelected = selectedTemplate === templateKey;
 
           return (
             <button
-              key={raceKey}
-              onClick={() => onChange(raceKey)}
+              key={templateKey}
+              onClick={() => onChange(isSelected ? '' : templateKey)}
               className={`w-full p-4 rounded-lg border text-left transition-all ${
                 isSelected
                   ? 'bg-[var(--primary)]/10 border-[var(--primary)]'
@@ -101,29 +115,22 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-bold text-lg">{race.name}</h3>
+                    <h3 className="font-bold text-lg">{template.name}</h3>
                     <span className="text-xs bg-[var(--background)] border border-[var(--border)] px-2 py-0.5 rounded">
-                      {getCategoryLabel(race.category)}
+                      {getCategoryLabel(template.category)}
                     </span>
-                    {race.levelAdjustment && (
+                    {template.levelAdjustment && (
                       <span className="text-xs bg-yellow-900/50 text-yellow-300 px-2 py-0.5 rounded">
-                        LA +{race.levelAdjustment}
+                        LA +{template.levelAdjustment}
                       </span>
                     )}
                   </div>
 
-                  <div className="text-sm space-y-1 mb-3">
+                  <p className="text-sm text-gray-400 mb-3">{template.description}</p>
+
+                  <div className="text-sm mb-3">
                     <div className="text-gray-400">
-                      Size: <span className="text-[var(--foreground)]">{getCategoryLabel(race.size)}</span>
-                    </div>
-                    <div className="text-gray-400">
-                      Speed: <span className="text-[var(--foreground)]">{race.speed} ft</span>
-                    </div>
-                    <div className="text-gray-400">
-                      Ability Mods: <span className="text-[var(--secondary)]">{formatAbilityMods(race)}</span>
-                    </div>
-                    <div className="text-gray-400">
-                      Favored Class: <span className="text-[var(--accent)]">{race.favoredClass}</span>
+                      Ability Mods: <span className="text-[var(--secondary)]">{formatAbilityMods(template)}</span>
                     </div>
                   </div>
 
@@ -132,29 +139,18 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
                       <span className="font-semibold text-[var(--primary)]">Special Abilities:</span>
                     </div>
                     <ul className="space-y-1">
-                      {race.specialAbilities.slice(0, 3).map((ability, index) => (
+                      {template.specialAbilities.slice(0, 4).map((ability, index) => (
                         <li key={index} className="text-sm flex items-start gap-2">
                           <span className="text-[var(--primary)] mt-1">•</span>
                           <span className="text-gray-300">{ability}</span>
                         </li>
                       ))}
-                      {race.specialAbilities.length > 3 && (
+                      {template.specialAbilities.length > 4 && (
                         <li className="text-sm text-gray-500 italic">
-                          ...and {race.specialAbilities.length - 3} more
+                          ...and {template.specialAbilities.length - 4} more
                         </li>
                       )}
                     </ul>
-                  </div>
-
-                  <div className="mt-3 pt-3 border-t border-[var(--border)]">
-                    <div className="grid grid-cols-1 gap-2 text-sm">
-                      <div>
-                        <span className="font-semibold text-[var(--primary)]">Languages:</span>
-                        <span className="text-gray-300 ml-2">
-                          {race.automaticLanguages.join(', ')}
-                        </span>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 {isSelected && (
@@ -172,9 +168,9 @@ export default function RaceSelector({ selectedRace, onChange }: RaceSelectorPro
         })}
       </div>
 
-      {filteredRaces.length === 0 && (
+      {filteredTemplates.length === 0 && (
         <div className="text-center py-8 text-gray-400">
-          No races found matching your search.
+          No templates found matching your search.
         </div>
       )}
     </div>

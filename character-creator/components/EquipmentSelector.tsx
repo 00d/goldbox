@@ -62,9 +62,7 @@ export default function EquipmentSelector({ equipment, onChange }: EquipmentSele
   ];
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--border)]">
-      <h2 className="text-2xl font-bold mb-4 text-[var(--primary)]">Equipment</h2>
-
+    <div>
       <div className="flex gap-2 mb-6 border-b border-[var(--border)]">
         {tabs.map((tab) => (
           <button

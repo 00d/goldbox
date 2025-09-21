@@ -1,8 +1,29 @@
-export const races = {
+export interface RaceData {
+  name: string;
+  category: 'core' | 'humanoid' | 'monstrous' | 'dragon' | 'aberration' | 'outsider' | 'undead' | 'construct' | 'elemental' | 'fey' | 'giant' | 'magical-beast' | 'ooze' | 'plant' | 'vermin';
+  abilityAdjustments: Partial<{
+    strength: number;
+    dexterity: number;
+    constitution: number;
+    intelligence: number;
+    wisdom: number;
+    charisma: number;
+  }>;
+  size: 'fine' | 'diminutive' | 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'gargantuan' | 'colossal';
+  speed: number;
+  specialAbilities: string[];
+  automaticLanguages: string[];
+  bonusLanguages: string[];
+  favoredClass: string;
+  levelAdjustment?: number;
+}
+
+export const races: Record<string, RaceData> = {
   human: {
     name: 'Human',
+    category: 'core',
     abilityAdjustments: {},
-    size: 'medium' as const,
+    size: 'medium',
     speed: 30,
     specialAbilities: [
       '1 extra feat at 1st level',
@@ -14,8 +35,9 @@ export const races = {
   },
   dwarf: {
     name: 'Dwarf',
+    category: 'core',
     abilityAdjustments: { constitution: 2, charisma: -2 },
-    size: 'medium' as const,
+    size: 'medium',
     speed: 20,
     specialAbilities: [
       'Darkvision 60 ft',
@@ -35,8 +57,9 @@ export const races = {
   },
   elf: {
     name: 'Elf',
+    category: 'core',
     abilityAdjustments: { dexterity: 2, constitution: -2 },
-    size: 'medium' as const,
+    size: 'medium',
     speed: 30,
     specialAbilities: [
       'Immunity to sleep spells',
@@ -52,8 +75,9 @@ export const races = {
   },
   gnome: {
     name: 'Gnome',
+    category: 'core',
     abilityAdjustments: { constitution: 2, strength: -2 },
-    size: 'small' as const,
+    size: 'small',
     speed: 20,
     specialAbilities: [
       'Small size: +1 AC, +1 attack, +4 Hide',
@@ -73,8 +97,9 @@ export const races = {
   },
   'half-elf': {
     name: 'Half-Elf',
+    category: 'core',
     abilityAdjustments: {},
-    size: 'medium' as const,
+    size: 'medium',
     speed: 30,
     specialAbilities: [
       'Immunity to sleep spells',
@@ -90,8 +115,9 @@ export const races = {
   },
   'half-orc': {
     name: 'Half-Orc',
+    category: 'core',
     abilityAdjustments: { strength: 2, intelligence: -2, charisma: -2 },
-    size: 'medium' as const,
+    size: 'medium',
     speed: 30,
     specialAbilities: [
       'Darkvision 60 ft',
@@ -103,8 +129,9 @@ export const races = {
   },
   halfling: {
     name: 'Halfling',
+    category: 'core',
     abilityAdjustments: { dexterity: 2, strength: -2 },
-    size: 'small' as const,
+    size: 'small',
     speed: 20,
     specialAbilities: [
       'Small size: +1 AC, +1 attack, +4 Hide',
@@ -117,5 +144,329 @@ export const races = {
     automaticLanguages: ['Common', 'Halfling'],
     bonusLanguages: ['Dwarven', 'Elven', 'Gnome', 'Goblin', 'Orc'],
     favoredClass: 'Rogue',
+  },
+
+  aasimar: {
+    name: 'Aasimar',
+    category: 'outsider',
+    abilityAdjustments: { wisdom: 2, charisma: 2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Daylight 1/day (spell-like ability)',
+      '+2 on Listen and Spot checks',
+      'Resistance 5 to acid, cold, and electricity',
+    ],
+    automaticLanguages: ['Common', 'Celestial'],
+    bonusLanguages: ['Draconic', 'Dwarven', 'Elven', 'Gnome', 'Halfling', 'Sylvan'],
+    favoredClass: 'Paladin',
+    levelAdjustment: 1,
+  },
+  tiefling: {
+    name: 'Tiefling',
+    category: 'outsider',
+    abilityAdjustments: { dexterity: 2, intelligence: 2, charisma: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Darkness 1/day (spell-like ability)',
+      '+2 on Bluff and Hide checks',
+      'Resistance 5 to cold, electricity, and fire',
+    ],
+    automaticLanguages: ['Common', 'Infernal'],
+    bonusLanguages: ['Draconic', 'Dwarven', 'Elven', 'Gnome', 'Goblin', 'Halfling', 'Orc'],
+    favoredClass: 'Rogue',
+    levelAdjustment: 1,
+  },
+
+  goblin: {
+    name: 'Goblin',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 2, strength: -2, charisma: -2 },
+    size: 'small',
+    speed: 30,
+    specialAbilities: [
+      'Small size: +1 AC, +1 attack, +4 Hide',
+      'Darkvision 60 ft',
+      '+4 on Move Silently and Ride checks',
+    ],
+    automaticLanguages: ['Goblin'],
+    bonusLanguages: ['Common', 'Draconic', 'Elven', 'Giant', 'Gnoll', 'Orc'],
+    favoredClass: 'Rogue',
+  },
+  hobgoblin: {
+    name: 'Hobgoblin',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 2, constitution: 2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      '+4 on Move Silently checks',
+    ],
+    automaticLanguages: ['Goblin', 'Common'],
+    bonusLanguages: ['Draconic', 'Dwarven', 'Infernal', 'Giant', 'Orc'],
+    favoredClass: 'Fighter',
+    levelAdjustment: 1,
+  },
+  kobold: {
+    name: 'Kobold',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 2, constitution: -4, strength: -4 },
+    size: 'small',
+    speed: 30,
+    specialAbilities: [
+      'Small size: +1 AC, +1 attack, +4 Hide',
+      'Darkvision 60 ft',
+      'Light sensitivity: -1 attack in bright sunlight',
+      '+2 on Craft (trapmaking), Profession (miner), and Search checks',
+    ],
+    automaticLanguages: ['Draconic'],
+    bonusLanguages: ['Common', 'Undercommon'],
+    favoredClass: 'Sorcerer',
+  },
+  orc: {
+    name: 'Orc',
+    category: 'humanoid',
+    abilityAdjustments: { strength: 4, intelligence: -2, wisdom: -2, charisma: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Light sensitivity: -1 attack in bright sunlight',
+    ],
+    automaticLanguages: ['Orc', 'Common'],
+    bonusLanguages: ['Dwarven', 'Giant', 'Gnoll', 'Goblin', 'Undercommon'],
+    favoredClass: 'Barbarian',
+  },
+
+  centaur: {
+    name: 'Centaur',
+    category: 'monstrous',
+    abilityAdjustments: { strength: 8, dexterity: 4, constitution: 4, intelligence: -2, wisdom: 2 },
+    size: 'large',
+    speed: 50,
+    specialAbilities: [
+      'Large size: -1 AC, -1 attack, -4 Hide',
+      'Darkvision 60 ft',
+      'Natural armor +3',
+      'Two hooves: 1d6 damage each',
+      'Undersized weapon: uses Medium weapons',
+    ],
+    automaticLanguages: ['Sylvan', 'Elven'],
+    bonusLanguages: ['Common', 'Gnome', 'Halfling'],
+    favoredClass: 'Ranger',
+    levelAdjustment: 2,
+  },
+  minotaur: {
+    name: 'Minotaur',
+    category: 'monstrous',
+    abilityAdjustments: { strength: 8, constitution: 4, intelligence: -4, wisdom: 2 },
+    size: 'large',
+    speed: 30,
+    specialAbilities: [
+      'Large size: -1 AC, -1 attack, -4 Hide',
+      'Darkvision 60 ft',
+      'Natural armor +5',
+      'Gore attack: 1d8 damage',
+      'Natural cunning: cannot be lost or affected by maze spell',
+      '+4 on Search, Spot, and Listen checks',
+      'Scent ability',
+    ],
+    automaticLanguages: ['Giant'],
+    bonusLanguages: ['Common', 'Orc', 'Goblin', 'Terran'],
+    favoredClass: 'Barbarian',
+    levelAdjustment: 2,
+  },
+
+  gnoll: {
+    name: 'Gnoll',
+    category: 'humanoid',
+    abilityAdjustments: { strength: 4, constitution: 2, intelligence: -2, charisma: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Natural armor +1',
+    ],
+    automaticLanguages: ['Gnoll'],
+    bonusLanguages: ['Common', 'Draconic', 'Elven', 'Goblin', 'Orc'],
+    favoredClass: 'Ranger',
+    levelAdjustment: 1,
+  },
+  lizardfolk: {
+    name: 'Lizardfolk',
+    category: 'humanoid',
+    abilityAdjustments: { strength: 2, constitution: 2, intelligence: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Natural armor +5',
+      'Hold breath: can hold breath for extended periods',
+      '+4 on Balance, Jump, and Swim checks',
+      'Claw attacks: 1d4 damage each',
+      'Bite attack: 1d4 damage',
+    ],
+    automaticLanguages: ['Draconic'],
+    bonusLanguages: ['Common', 'Aquan', 'Gnoll', 'Goblin', 'Orc'],
+    favoredClass: 'Druid',
+    levelAdjustment: 1,
+  },
+
+  drow: {
+    name: 'Drow (Dark Elf)',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 2, constitution: -2, intelligence: 2, charisma: 2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 120 ft',
+      'Spell resistance 11 + class levels',
+      'Spell-like abilities: dancing lights, darkness, faerie fire (1/day each)',
+      '+2 on Will saves vs spells and spell-like abilities',
+      'Light blindness: abrupt exposure to bright light blinds for 1 round',
+      'Weapon proficiency: rapier, short sword, hand crossbow',
+      '+2 on Listen, Search, and Spot checks',
+    ],
+    automaticLanguages: ['Elven', 'Undercommon'],
+    bonusLanguages: ['Abyssal', 'Aquan', 'Common', 'Draconic', 'Drow Sign Language', 'Gnome', 'Goblin'],
+    favoredClass: 'Wizard',
+    levelAdjustment: 2,
+  },
+
+  bugbear: {
+    name: 'Bugbear',
+    category: 'humanoid',
+    abilityAdjustments: { strength: 4, dexterity: 2, constitution: 2, charisma: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Natural armor +3',
+      '+4 on Move Silently checks',
+      'Scent ability',
+    ],
+    automaticLanguages: ['Goblin'],
+    bonusLanguages: ['Common', 'Giant', 'Gnoll', 'Orc'],
+    favoredClass: 'Rogue',
+    levelAdjustment: 1,
+  },
+
+  troglodyte: {
+    name: 'Troglodyte',
+    category: 'humanoid',
+    abilityAdjustments: { strength: 2, dexterity: -2, constitution: 4, intelligence: -4 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 90 ft',
+      'Natural armor +6',
+      'Stench: Enemies within 30 ft must make Fort save or be sickened',
+      'Claw attacks: 1d4 damage each',
+      'Bite attack: 1d4 damage',
+      'Chameleon power: +4 on Hide checks',
+    ],
+    automaticLanguages: ['Draconic'],
+    bonusLanguages: ['Common'],
+    favoredClass: 'Cleric',
+    levelAdjustment: 2,
+  },
+
+  ogre: {
+    name: 'Ogre',
+    category: 'giant',
+    abilityAdjustments: { strength: 10, constitution: 4, dexterity: -2, intelligence: -4, charisma: -4 },
+    size: 'large',
+    speed: 40,
+    specialAbilities: [
+      'Large size: -1 AC, -1 attack, -4 Hide',
+      'Darkvision 60 ft',
+      'Low-light vision',
+      'Natural armor +5',
+    ],
+    automaticLanguages: ['Giant'],
+    bonusLanguages: ['Common', 'Goblin', 'Orc', 'Terran'],
+    favoredClass: 'Barbarian',
+    levelAdjustment: 2,
+  },
+  troll: {
+    name: 'Troll',
+    category: 'giant',
+    abilityAdjustments: { strength: 12, dexterity: 4, constitution: 12, intelligence: -4, wisdom: -2, charisma: -4 },
+    size: 'large',
+    speed: 30,
+    specialAbilities: [
+      'Large size: -1 AC, -1 attack, -4 Hide',
+      'Darkvision 90 ft',
+      'Low-light vision',
+      'Regeneration 5',
+      'Natural armor +5',
+      'Rend: 2d6+9 damage if both claws hit',
+      'Claw attacks: 1d6 damage each',
+      'Bite attack: 1d6 damage',
+    ],
+    automaticLanguages: ['Giant'],
+    bonusLanguages: ['Common', 'Orc'],
+    favoredClass: 'Fighter',
+    levelAdjustment: 5,
+  },
+
+  yuan_ti_pureblood: {
+    name: 'Yuan-Ti Pureblood',
+    category: 'monstrous',
+    abilityAdjustments: { dexterity: 2, intelligence: 2, charisma: 2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Spell-like abilities: detect poison, animal trance (snakes only) at will',
+      'Alternate form: can assume form of Tiny to Large viper',
+      '+4 on Disguise checks',
+      'Natural armor +1',
+      'Spell resistance 5 + HD',
+    ],
+    automaticLanguages: ['Common', 'Yuan-Ti'],
+    bonusLanguages: ['Draconic', 'Abyssal'],
+    favoredClass: 'Ranger',
+    levelAdjustment: 3,
+  },
+
+  githyanki: {
+    name: 'Githyanki',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 2, constitution: 2, wisdom: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Spell-like abilities: daze, mage hand at will; blur, dimension door, plane shift 1/day',
+      'Weapon proficiency: greatsword, longsword, shortsword',
+      '+4 on saves vs charm and fear',
+      'Spell resistance 5 + HD',
+    ],
+    automaticLanguages: ['Gith'],
+    bonusLanguages: ['Common', 'Draconic', 'Infernal', 'Undercommon'],
+    favoredClass: 'Fighter',
+    levelAdjustment: 2,
+  },
+  githzerai: {
+    name: 'Githzerai',
+    category: 'humanoid',
+    abilityAdjustments: { dexterity: 6, wisdom: 2, intelligence: -2, strength: -2 },
+    size: 'medium',
+    speed: 30,
+    specialAbilities: [
+      'Darkvision 60 ft',
+      'Spell-like abilities: daze, mage hand at will; blur, dimension door, plane shift 1/day',
+      'Inertial armor: +4 armor bonus to AC',
+      '+4 on saves vs charm and fear',
+      'Spell resistance 5 + HD',
+    ],
+    automaticLanguages: ['Gith'],
+    bonusLanguages: ['Common', 'Draconic'],
+    favoredClass: 'Monk',
+    levelAdjustment: 2,
   },
 };
