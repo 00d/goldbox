@@ -55,4 +55,9 @@ export const skills: SkillData[] = [
   { name: 'Tumble', ability: 'dexterity', trainedOnly: true, armorCheckPenalty: true },
   { name: 'Use Magic Device', ability: 'charisma', trainedOnly: true },
   { name: 'Use Rope', ability: 'dexterity' },
+  // Psionic Skills
+  { name: 'Autohypnosis', ability: 'wisdom', trainedOnly: true },
+  { name: 'Knowledge (psionics)', ability: 'intelligence', trainedOnly: true },
+  { name: 'Psicraft', ability: 'intelligence', trainedOnly: true },
+  { name: 'Use Psionic Device', ability: 'charisma', trainedOnly: true },
 ];

@@ -22,7 +22,11 @@ export type CharacterClass =
   | 'ranger'
   | 'rogue'
   | 'sorcerer'
-  | 'wizard';
+  | 'wizard'
+  | 'psion'
+  | 'psychic-warrior'
+  | 'soulknife'
+  | 'wilder';
 
 export type Alignment =
   | 'lawful-good'

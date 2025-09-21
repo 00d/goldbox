@@ -202,4 +202,116 @@ export const commonFeats: Feat[] = [
     prerequisites: ['BAB +1'],
     type: 'general',
   },
+  // Psionic Feats
+  {
+    name: 'Wild Talent',
+    description: 'Gain 2 power points and become psionic',
+    type: 'general',
+  },
+  {
+    name: 'Speed of Thought',
+    description: '+10 feet to base speed',
+    prerequisites: ['Wis 13'],
+    type: 'general',
+  },
+  {
+    name: 'Psionic Body',
+    description: '+2 hit points for each psionic feat you have',
+    type: 'general',
+  },
+  {
+    name: 'Psionic Dodge',
+    description: '+1 dodge bonus to AC if psionically focused',
+    prerequisites: ['Dex 13', 'Dodge'],
+    type: 'general',
+  },
+  {
+    name: 'Psionic Weapon',
+    description: '+2d6 damage with weapon when psionically focused',
+    prerequisites: ['Str 13'],
+    type: 'general',
+  },
+  {
+    name: 'Psionic Fist',
+    description: '+2d6 damage with unarmed strike when psionically focused',
+    prerequisites: ['Str 13'],
+    type: 'general',
+  },
+  {
+    name: 'Psionic Shot',
+    description: '+2d6 damage with ranged weapon when psionically focused',
+    prerequisites: ['Point Blank Shot'],
+    type: 'general',
+  },
+  {
+    name: 'Greater Psionic Weapon',
+    description: 'Expend psionic focus for +4d6 damage',
+    prerequisites: ['Psionic Weapon', 'BAB +5'],
+    type: 'general',
+  },
+  {
+    name: 'Mental Resistance',
+    description: 'Gain PR equal to Will save bonus',
+    prerequisites: ['BAB +2'],
+    type: 'general',
+  },
+  {
+    name: 'Psionic Meditation',
+    description: 'Become psionically focused as move action',
+    prerequisites: ['Wis 13', 'Concentration 7 ranks'],
+    type: 'general',
+  },
+  {
+    name: 'Power Penetration',
+    description: '+4 on manifester level checks to overcome power resistance',
+    type: 'general',
+  },
+  {
+    name: 'Greater Power Penetration',
+    description: 'Additional +4 to overcome power resistance',
+    prerequisites: ['Power Penetration'],
+    type: 'general',
+  },
+  {
+    name: 'Overchannel',
+    description: 'Increase manifester level at cost of damage',
+    type: 'general',
+  },
+  {
+    name: 'Talented',
+    description: 'Overchannel without taking damage 1/day',
+    prerequisites: ['Overchannel'],
+    type: 'general',
+  },
+  // Epic Feats (basic ones available at level 21+)
+  {
+    name: 'Epic Toughness',
+    description: '+30 hit points',
+    prerequisites: ['Level 21+'],
+    type: 'general',
+  },
+  {
+    name: 'Epic Weapon Focus',
+    description: '+2 bonus on attack rolls with chosen weapon',
+    prerequisites: ['Level 21+', 'Weapon Focus'],
+    type: 'general',
+  },
+  {
+    name: 'Epic Will',
+    description: '+4 bonus on Will saves',
+    prerequisites: ['Level 21+', 'Iron Will'],
+    type: 'general',
+  },
+  {
+    name: 'Epic Fortitude',
+    description: '+4 bonus on Fortitude saves',
+    prerequisites: ['Level 21+', 'Great Fortitude'],
+    type: 'general',
+  },
+  {
+    name: 'Epic Reflexes',
+    description: '+4 bonus on Reflex saves',
+    prerequisites: ['Level 21+', 'Lightning Reflexes'],
+    type: 'general',
+  },
 ];

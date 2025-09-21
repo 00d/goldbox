@@ -37,6 +37,8 @@ export default function CharacterCreator() {
   const [selectedRace, setSelectedRace] = useState<Race | ''>('');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | ''>('');
   const [selectedClass, setSelectedClass] = useState<CharacterClass | ''>('');
+  const [characterLevel, setCharacterLevel] = useState(1);
+  const [selectedAlignment, setSelectedAlignment] = useState<'lawful-good' | 'neutral-good' | 'chaotic-good' | 'lawful-neutral' | 'true-neutral' | 'chaotic-neutral' | 'lawful-evil' | 'neutral-evil' | 'chaotic-evil'>('true-neutral');
   const [abilityScores, setAbilityScores] = useState<AbilityScores>(initialAbilityScores);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [feats, setFeats] = useState<Feat[]>([]);
@@ -49,13 +51,39 @@ export default function CharacterCreator() {
     const classData = classes[selectedClass];
     const intModifier = Math.floor((abilityScores.intelligence - 10) / 2);
     let base = classData.skillPoints + intModifier;
-    if (selectedRace === 'human') base += 4;
-    return Math.max(1, base);
+    if (selectedRace === 'human') base += 1; // Extra skill point per level for humans
+    // First level gets x4 skill points
+    let totalPoints = base * 4;
+    // Add points for additional levels
+    if (characterLevel > 1) {
+      totalPoints += base * (characterLevel - 1);
+    }
+    return Math.max(characterLevel, totalPoints);
   };
 
   const getAvailableFeats = (): number => {
-    let total = 1;
-    if (selectedRace === 'human') total += 1;
+    let total = 1; // 1 feat at 1st level
+    if (selectedRace === 'human') total += 1; // Humans get 1 extra feat at 1st level
+    // Additional feats at 3rd, 6th, 9th, etc.
+    total += Math.floor(characterLevel / 3);
+    // Fighter bonus feats
+    if (selectedClass === 'fighter') {
+      total += 1; // Bonus feat at 1st level
+      if (characterLevel >= 2) total += 1; // Bonus feat at 2nd level
+      total += Math.floor((characterLevel - 2) / 2); // Every 2 levels after 2nd
+    }
+    // Wizard bonus feats (metamagic/item creation)
+    if (selectedClass === 'wizard') {
+      total += Math.floor(characterLevel / 5); // Every 5 levels
+    }
+    // Psion bonus feats
+    if (selectedClass === 'psion') {
+      total += Math.floor((characterLevel + 4) / 5); // 1st, 5th, 10th, 15th, 20th
+    }
+    // Epic feats (21+)
+    if (characterLevel > 20) {
+      total += Math.floor((characterLevel - 20) / 3); // Epic feat every 3 levels after 20
+    }
     return total;
   };
 
@@ -102,8 +130,8 @@ export default function CharacterCreator() {
         race: selectedRace || 'human',
         template: selectedTemplate || undefined,
         class: selectedClass || 'fighter',
-        level: 1,
-        alignment: 'true-neutral',
+        level: characterLevel,
+        alignment: selectedAlignment,
         size: selectedRace && races[selectedRace] ? races[selectedRace].size : 'medium',
       },
       abilityScores: finalAbilityScores,
@@ -151,6 +179,8 @@ export default function CharacterCreator() {
     setSelectedRace('');
     setSelectedTemplate('');
     setSelectedClass('');
+    setCharacterLevel(1);
+    setSelectedAlignment('true-neutral');
     setAbilityScores(initialAbilityScores);
     setSkills([]);
     setFeats([]);
@@ -163,6 +193,8 @@ export default function CharacterCreator() {
     setSelectedRace(character.basicInfo.race);
     setSelectedTemplate(character.basicInfo.template || '');
     setSelectedClass(character.basicInfo.class);
+    setCharacterLevel(character.basicInfo.level);
+    setSelectedAlignment(character.basicInfo.alignment);
     setAbilityScores(character.abilityScores);
     setSkills(character.skills);
     setFeats(character.feats);
@@ -278,6 +310,41 @@ export default function CharacterCreator() {
                   className="w-full bg-[var(--input-bg)] border border-[var(--border)] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
                 />
               </div>
+              <div>
+                <label htmlFor="characterLevel" className="block text-sm font-medium mb-2">
+                  Character Level {characterLevel > 20 && <span className="text-[var(--primary)]">(Epic)</span>}
+                </label>
+                <input
+                  id="characterLevel"
+                  type="number"
+                  min="1"
+                  max="40"
+                  value={characterLevel}
+                  onChange={(e) => setCharacterLevel(Math.min(40, Math.max(1, parseInt(e.target.value) || 1)))}
+                  className="w-full bg-[var(--input-bg)] border border-[var(--border)] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label htmlFor="alignment" className="block text-sm font-medium mb-2">
+                  Alignment
+                </label>
+                <select
+                  id="alignment"
+                  value={selectedAlignment}
+                  onChange={(e) => setSelectedAlignment(e.target.value as 'lawful-good' | 'neutral-good' | 'chaotic-good' | 'lawful-neutral' | 'true-neutral' | 'chaotic-neutral' | 'lawful-evil' | 'neutral-evil' | 'chaotic-evil')}
+                  className="w-full bg-[var(--input-bg)] border border-[var(--border)] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                >
+                  <option value="lawful-good">Lawful Good</option>
+                  <option value="neutral-good">Neutral Good</option>
+                  <option value="chaotic-good">Chaotic Good</option>
+                  <option value="lawful-neutral">Lawful Neutral</option>
+                  <option value="true-neutral">True Neutral</option>
+                  <option value="chaotic-neutral">Chaotic Neutral</option>
+                  <option value="lawful-evil">Lawful Evil</option>
+                  <option value="neutral-evil">Neutral Evil</option>
+                  <option value="chaotic-evil">Chaotic Evil</option>
+                </select>
+              </div>
             </div>
           </AccordionItem>
 
@@ -342,6 +409,14 @@ export default function CharacterCreator() {
             <div>
               <span className="text-gray-400">Class:</span>
               <span className="ml-2 font-medium">{selectedClass ? classes[selectedClass].name : 'Not selected'}</span>
+            </div>
+            <div>
+              <span className="text-gray-400">Level:</span>
+              <span className="ml-2 font-medium">{characterLevel} {characterLevel > 20 && '(Epic)'}</span>
+            </div>
+            <div>
+              <span className="text-gray-400">Alignment:</span>
+              <span className="ml-2 font-medium">{selectedAlignment.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}</span>
             </div>
             <div>
               <span className="text-gray-400">Skills Allocated:</span>
