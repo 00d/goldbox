@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import os from 'os';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+const DATA_DIR = path.join(os.tmpdir(), 'character-creator-data');
 
 export async function GET() {
   try {
