@@ -1,0 +1,46 @@
+# Explicit files and directories currently in the workspace
+example_workflow.sh
+script1_model_a_init.py
+script2_model_b_init.py
+script3_model_b_capture.py
+setup_api.sh
+utils.py
+
+# Python cache
+__pycache__/
+
+# Claude assistant local settings (contains API keys)
+.claude/
+
+# Environment and dependency directories
+env/
+venv/
+ENV/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Ignore local secrets/config
+secrets.toml
+*.env
+.env
+
+# Keep the .gitignore itself tracked
+!.gitignore
