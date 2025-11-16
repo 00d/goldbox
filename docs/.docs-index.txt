@@ -1,0 +1,73 @@
+GOLD BOX CRPG - TECHNICAL DOCUMENTATION
+========================================
+
+📁 Documentation Directory: /docs
+
+📋 START HERE: README.md (15KB)
+   Complete index with quick start guide, technology stack, and navigation
+
+📚 CORE DOCUMENTS (260KB total):
+
+1️⃣  ARCHITECTURE.md (42KB)
+   🏗️  System architecture, monorepo structure, state management
+   
+2️⃣  SOLIDJS_MIGRATION_GUIDE.md (28KB)
+   ⚡ UI framework guide, React to Solid.js, performance benefits
+   
+3️⃣  PATHFINDER_2E_RULES.md (37KB)
+   🎲 Game rules engine, combat, spells, conditions
+   
+4️⃣  CONTENT_PIPELINE.md (33KB)
+   📦 Content management, 2000+ entries, lazy loading, caching
+   
+5️⃣  GOLD_BOX_UI_DESIGN.md (36KB)
+   🎨 UI/UX patterns, screens, menus, accessibility
+   
+6️⃣  GRAPHICS_PIPELINE.md (55KB)
+   🎮 Rendering architecture, PixiJS, Three.js, effects
+   
+7️⃣  DIRECTORY_STRUCTURE.md (12KB)
+   📂 Navigation guide, reading paths, cross-references
+
+========================================
+QUICK ACCESS BY ROLE:
+
+👨‍💼 Project Manager:
+   → README.md → ARCHITECTURE.md
+
+👨‍💻 Frontend Developer:
+   → SOLIDJS_MIGRATION_GUIDE.md → GOLD_BOX_UI_DESIGN.md
+
+🎮 Graphics Engineer:
+   → GRAPHICS_PIPELINE.md → GOLD_BOX_UI_DESIGN.md
+
+⚙️  Gameplay Programmer:
+   → PATHFINDER_2E_RULES.md → ARCHITECTURE.md
+
+📝 Content Designer:
+   → CONTENT_PIPELINE.md → PATHFINDER_2E_RULES.md
+
+========================================
+TECHNOLOGY STACK:
+
+UI:         Solid.js (30x faster than React)
+2D:         PixiJS v8 (WebGL, automatic batching)
+3D:         Three.js (first-person dungeons)
+Animation:  GSAP
+State:      TypeScript + Solid.js
+Validation: Zod
+Build:      Vite
+Packages:   PNPM workspaces
+
+========================================
+PROJECT STATS:
+
+Documentation:  8 files, ~260KB, 8,700+ lines
+Game Content:   2000+ entries (spells, feats, items)
+Performance:    60 FPS @ 1080p target
+Rules:          Full Pathfinder 2E Remastered
+
+========================================
+Last Updated: November 15, 2025
+Version: 1.0 (Initial Design Phase)
+========================================
