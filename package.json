@@ -1,0 +1,29 @@
+{
+  "name": "goldbox",
+  "version": "1.0.0",
+  "description": "Base framework for a modern update to the classic Gold Box games of D&amp;D",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/00d/goldbox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/00d/goldbox/issues"
+  },
+  "homepage": "https://github.com/00d/goldbox#readme",
+  "dependencies": {
+    "konva": "^10.0.9",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-konva": "^19.2.0"
+  }
+}
