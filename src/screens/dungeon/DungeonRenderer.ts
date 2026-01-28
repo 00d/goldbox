@@ -52,8 +52,14 @@ export class DungeonRenderer {
   }
 
   private async init(canvas: HTMLCanvasElement) {
+    if (!navigator.gpu) {
+      throw new Error('WebGPU is not supported in this browser. Please use Chrome, Edge, or another WebGPU-compatible browser.');
+    }
+
     const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) throw new Error('No WebGPU adapter found.');
+    if (!adapter) {
+      throw new Error('No WebGPU adapter found. Your GPU may not support WebGPU.');
+    }
     this.device = await adapter.requestDevice();
 
     this.context = canvas.getContext('webgpu')!;
@@ -175,10 +181,10 @@ export class DungeonRenderer {
   }
 
   /**
-   * Dispatch compute + render. Returns a promise that resolves when the GPU is idle.
+   * Dispatch compute + render. GPU commands are submitted asynchronously.
+   * Note: This must only be called after initialization is complete (isReady = true).
    */
-  async frame() {
-    await this.initPromise;
+  frame() {
     if (!this.bindGroup) return; // map not loaded yet
 
     const encoder = this.device.createCommandEncoder();

@@ -16,6 +16,8 @@
     canvas {
       display: block;
       image-rendering: pixelated;
+      width: 960px;
+      height: 720px;
     }
     #overlay {
       position: fixed;
@@ -31,7 +33,7 @@
 </head>
 <body>
   <canvas id="canvas"></canvas>
-  <div id="overlay">WASD: move &nbsp; Mouse: look &nbsp; Click canvas to capture mouse</div>
+  <div id="overlay">WASD: move &nbsp; C: character &nbsp; I: inventory &nbsp; ESC: menu</div>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>
