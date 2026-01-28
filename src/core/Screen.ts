@@ -104,6 +104,9 @@ export class ScreenManager {
   private overlayCanvas: HTMLCanvasElement;
   private overlayCtx: CanvasRenderingContext2D;
 
+  // Canvas change callback (for InputManager)
+  private onCanvasChange: ((canvas: HTMLCanvasElement) => void) | null = null;
+
   constructor(context: Omit<ScreenContext, 'screenManager'>) {
     this.context = { ...context, screenManager: this };
 
@@ -165,13 +168,24 @@ export class ScreenManager {
 
     this.transitionState = TransitionState.TransitionEffect;
 
+    // Check if we need to reset canvas for context type switch
+    const fromScreenId = this.activeScreen?.id || null;
+    const toScreenId = this.nextScreen!.id;
+
+    // Reset canvas when switching between WebGPU (dungeon) and Canvas2D (others)
+    const needsWebGPU = toScreenId === 'dungeon';
+    const hadWebGPU = fromScreenId === 'dungeon';
+
+    if (needsWebGPU !== hadWebGPU) {
+      this.resetCanvas();
+    }
+
     // Wait for transition effect if not instant
     if (this.transitionType !== TransitionType.Instant) {
       await this.waitForTransitionEffect();
     }
 
     // Enter new screen
-    const fromScreenId = this.activeScreen?.id || null;
     this.activeScreen = this.nextScreen;
     await this.activeScreen!.enter(fromScreenId, this.transitionParams);
 
@@ -341,5 +355,47 @@ export class ScreenManager {
    */
   getGameState(): GameStateStore {
     return this.context.gameState;
+  }
+
+  /**
+   * Set callback for when canvas is replaced.
+   */
+  setCanvasChangeCallback(callback: (canvas: HTMLCanvasElement) => void): void {
+    this.onCanvasChange = callback;
+  }
+
+  /**
+   * Reset canvas by replacing it with a fresh one.
+   * Necessary when switching between Canvas2D and WebGPU contexts.
+   */
+  private resetCanvas(): void {
+    const oldCanvas = this.context.canvas;
+    const parent = oldCanvas.parentElement;
+
+    if (!parent) return;
+
+    // Create new canvas with same properties
+    const newCanvas = document.createElement('canvas');
+    newCanvas.id = oldCanvas.id;
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+    newCanvas.style.cssText = oldCanvas.style.cssText;
+
+    // Replace old canvas
+    parent.replaceChild(newCanvas, oldCanvas);
+
+    // Update context reference
+    this.context.canvas = newCanvas;
+
+    // Update overlay canvas dimensions if needed
+    if (this.overlayCanvas) {
+      this.overlayCanvas.width = newCanvas.width;
+      this.overlayCanvas.height = newCanvas.height;
+    }
+
+    // Notify callback (for InputManager)
+    if (this.onCanvasChange) {
+      this.onCanvasChange(newCanvas);
+    }
   }
 }

@@ -20,6 +20,16 @@ export class InputManager {
   // Global shortcuts
   private globalShortcuts: Map<string, () => void> = new Map();
 
+  // Bound event handlers (for proper removal)
+  private boundHandlers = {
+    mousedown: this.onMouseDown.bind(this),
+    mouseup: this.onMouseUp.bind(this),
+    mousemove: this.onMouseMove.bind(this),
+    wheel: this.onWheel.bind(this),
+    click: this.onCanvasClick.bind(this),
+    contextmenu: (e: Event) => e.preventDefault(),
+  };
+
   constructor(screenManager: ScreenManager, canvas: HTMLCanvasElement) {
     this.screenManager = screenManager;
     this.canvas = canvas;
@@ -29,22 +39,33 @@ export class InputManager {
   }
 
   private setupEventListeners(): void {
-    // Keyboard
+    // Keyboard (window-level, don't need to remove)
     window.addEventListener('keydown', this.onKeyDown.bind(this));
     window.addEventListener('keyup', this.onKeyUp.bind(this));
 
-    // Mouse
-    this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
-    this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
-    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
-    this.canvas.addEventListener('wheel', this.onWheel.bind(this));
-
-    // Pointer lock
-    this.canvas.addEventListener('click', this.onCanvasClick.bind(this));
+    // Pointer lock change (document-level, don't need to remove)
     document.addEventListener('pointerlockchange', this.onPointerLockChange.bind(this));
 
-    // Prevent context menu
-    this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+    // Canvas-specific events
+    this.attachCanvasListeners();
+  }
+
+  private attachCanvasListeners(): void {
+    this.canvas.addEventListener('mousedown', this.boundHandlers.mousedown);
+    this.canvas.addEventListener('mouseup', this.boundHandlers.mouseup);
+    this.canvas.addEventListener('mousemove', this.boundHandlers.mousemove);
+    this.canvas.addEventListener('wheel', this.boundHandlers.wheel);
+    this.canvas.addEventListener('click', this.boundHandlers.click);
+    this.canvas.addEventListener('contextmenu', this.boundHandlers.contextmenu);
+  }
+
+  private detachCanvasListeners(): void {
+    this.canvas.removeEventListener('mousedown', this.boundHandlers.mousedown);
+    this.canvas.removeEventListener('mouseup', this.boundHandlers.mouseup);
+    this.canvas.removeEventListener('mousemove', this.boundHandlers.mousemove);
+    this.canvas.removeEventListener('wheel', this.boundHandlers.wheel);
+    this.canvas.removeEventListener('click', this.boundHandlers.click);
+    this.canvas.removeEventListener('contextmenu', this.boundHandlers.contextmenu);
   }
 
   private setupGlobalShortcuts(): void {
@@ -246,5 +267,20 @@ export class InputManager {
   clearState(): void {
     this.keysDown.clear();
     this.mouseButtons.clear();
+  }
+
+  /**
+   * Update canvas reference and re-setup event listeners.
+   * Called when canvas is replaced (e.g., switching between WebGPU and Canvas2D).
+   */
+  updateCanvas(newCanvas: HTMLCanvasElement): void {
+    // Remove listeners from old canvas
+    this.detachCanvasListeners();
+
+    // Update reference
+    this.canvas = newCanvas;
+
+    // Add listeners to new canvas
+    this.attachCanvasListeners();
   }
 }

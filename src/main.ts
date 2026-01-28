@@ -30,6 +30,11 @@ async function main() {
   const screenManager = new ScreenManager({ gameState, canvas });
   const inputManager = new InputManager(screenManager, canvas);
 
+  // Set up canvas change callback for context switching
+  screenManager.setCanvasChangeCallback((newCanvas) => {
+    inputManager.updateCanvas(newCanvas);
+  });
+
   // Register screens
   await screenManager.register(new MainMenuScreen());
   await screenManager.register(new OverworldScreen());
